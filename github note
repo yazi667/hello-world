@@ -1,0 +1,69 @@
+github是目前流行的代码托管网站。
+github.com是一个网站，它为你提供一个远程版本库（你和你的协作者的工作成果最终提交在这里）；同时它也是一个共享平台，你可以在这里找到数不尽的源码。
+关于github的安装和使用（windows系统的），参考官方文档。
+https://help.github.com/articles/set-up-git
+ 
+使用流程 
+1、注册github帐户。 
+ 登录http://github.com，拥有一个自己的帐号和密码 。 2、下载一个git客户端。  推荐msysgit，下载地址：
+http://code.google.com/p/msysgit/downloads/list?q=full+installer+official+git；下载最新版本即可。 3、安装msysgit。 
+ 一路默认点next，安装完成。 4、绑定你的github帐户和邮件。 
+ 点击msysgit的快捷方式，弹出一个命令行shell，输入：        git config --global user.name "yourname"  
+ （这里的yourname相当于你的一个签名，而非github的登录名。以后你提交的文档都会有这个签名） 
+    回车后继续输入： 
+     git config --global user.email "youreami@xx.xxx"       （这里输入的是你github的帐户邮箱）
+5、设置SSH。 
+   SSH是一种连接方式，一方面免于你总是在连接时输入用户和密码，另一方面增加安全性。本人初次接触SSH，我的简单理解是，ssh是两段很长的字符串，一段是锁，另一段是钥匙。你把锁放在你的github帐户上，而电脑上留有你的钥匙，每当连接时，git会自动用钥匙去开锁。 
+    第一步：生成钥匙和锁 
+   在命令行输入：ssh-keygen -t rsa -C  your_email@youremail.com 
+   然后回车，期间会问你生成的文件名和passphrase，对于我这种菜鸟，我一路点回车。如果你也是菜鸟，跟我一样做。 （passphrase 可以设置密码）
+    第二步：将锁放到github的帐户里 
+   上一步生成的文件放在了C:/Users/用户名（你的windows用户）/.ssh/文件夹中，用记事本打开其中的id_rsa.pub文件，全部内容复制。登录github网站，找到account setting,
+ 
+setting, 如图：
+
+将刚才复制的粘贴到key文本框中。
+    第三步：测试是否成功
+     在命令行输入：ssh -T git@github.com 如果成功，会显示欢迎字符。
+6、创建一个远程库(repository)
+      在网站上登录你的github帐户，点击Repositoies选项卡，点击New，如图：
+建立一个名叫Hello的库。（名字随便取，但在本地建库时必须使用相同名字），如图
+      
+7、建立本地库
+     在自己电脑上任意一个文件夹，新建一个目录，目录名与在github上所建库的名字相同，这里是Hello。然后右击文件夹，在弹出菜单中选择git bash ，弹出命令行窗口，输入：git init。此时git会在这个文件夹下创建一个隐藏目录，这个目录就是本地库了。，而这个Hello目录，实际上就是你的工作路径。
+8、绑定本地库和远程库
+     承接第7步（即目前命令行中所显示你的目录为hello），输入命令：
+git remote add origin git@github.com:你的用户名/hello.git
+8、开始同步
+     1）从远程库上更新本地库数据
+     好了，现在你的工作路径－本地库－远程库都串联好了。现在我们就可以同步数据。首先，之前我们建立远程库时貌似建立了一个Readme文件，当时，没建也没关系，但我们要保证本地库和远程库一致，而远程库是最终版本，所以先确保本地库和远程库的文件一样。在工作路径下（即git显示你的hello文件夹下）输入：git pull origin master，如果远程库上有你本地库没有的文件，git会帮你下载下来，否则它显示already update.
+      这里的pull和origin好理解，master是什么意思？它是主分支的意思，关于分支我们不讨论，你只要知道一个库可以有多个分支，目前我们只有master一个分支。
+      2）将本地新数据提交到远程库
+     如果你想将一个New.java文件加入远程库hello
+    第一步：将New.java拷到本地hello文件夹下。
+    第二步：在命令行的hello路径下输入：
+     git add New.java （将本地库知道了这个文件）
+    第三步：输入：
+     git commit -m "我提交了一个java." （变化提交到了本地库） 这里-m表示提交一个message，后面是message内容，这是必须的。
+   第四步：输入：
+   git push origin master(变化提交到了远程库）
+   OK，搞定。你登录到github网站上你的帐户，会发现多了一个文件
+   3)将本地文件的所有修改更新到远程库
+   一般情况下，你也不知道自己的文件发生了多少变化，你可以输入git status，会告诉你有哪些变化，然后你输入git commit -a -m "your message“， 把所有变化提交到本地库，继续git push origin master，就更新到远程库了。
+注意：一般的变化都不要push，只有最终感觉差不多了，再把文件push上去。
+9、克隆别人的库
+   第一步：
+   首先在网站上进入别人的库（通过别人提供的链接或者自己在页面上查询），然后在右下方选择SSH，如图：
+将链接复制下来。
+第二步，在你的电脑上新建一个与人家库名相同的文件夹，然后在文件夹上右击，在弹出菜单上选git bash，打开命令行，输入git init，初始化库，然后输入git remote add origin ,右击命令行窗口标题栏，在弹出菜单上选“编辑”->"粘贴"，回车，就建立了联系。
+第三步，输入git clone，就等着它帮你下完吧。
+注意：如果对方未授权，你是无法push的。你自己的库也可以授权给别人，在你的库页面右方有个setting，你可以进行设置collabtories（协作者）。
+ 
+-----------------------------------
+ 
+eclipse 中 使用git
+ 
+教程懒得写了 直接百度贴出来了：
+http://jiangli.easymorse.com/?p=783
+http://www.cnblogs.com/terrylin/archive/2012/05/22/2513320.html
+ 
